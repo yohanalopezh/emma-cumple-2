@@ -5,21 +5,54 @@
 <title>Emma cumple 2</title>
 
 <style>
-body {
+
+body{
     text-align:center;
     font-family: Arial;
     background: linear-gradient(red, yellow, blue);
     color:white;
+    overflow:hidden;
 }
 
-h1 {
-    font-size:60px;
+h1{
+    font-size:70px;
+    animation: zoom 2s infinite alternate;
 }
 
-#countdown {
+@keyframes zoom{
+    from{transform:scale(1)}
+    to{transform:scale(1.1)}
+}
+
+#countdown{
     font-size:40px;
     margin-top:20px;
 }
+
+.balloon{
+    position:absolute;
+    bottom:-100px;
+    width:60px;
+    animation: float 10s infinite;
+}
+
+@keyframes float{
+    from{bottom:-100px}
+    to{bottom:100%}
+}
+
+.character{
+    position:absolute;
+    width:150px;
+    animation: appear 6s infinite;
+}
+
+@keyframes appear{
+    0%{opacity:0; transform:translateX(-200px)}
+    50%{opacity:1; transform:translateX(200px)}
+    100%{opacity:0; transform:translateX(600px)}
+}
+
 </style>
 
 </head>
@@ -38,9 +71,31 @@ h1 {
 
 <div id="countdown"></div>
 
+
+<!-- MUSICA -->
 <audio autoplay loop>
-<source src="https://www2.cs.uic.edu/~i101/SoundFiles/StarWars60.wav">
+<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
 </audio>
+
+
+<!-- GLOBOS -->
+
+<img class="balloon" style="left:10%" src="https://i.imgur.com/7Qp7R.png">
+<img class="balloon" style="left:40%" src="https://i.imgur.com/7Qp7R.png">
+<img class="balloon" style="left:70%" src="https://i.imgur.com/7Qp7R.png">
+
+
+<!-- PERSONAJES SING -->
+
+<img class="character" style="top:50%" 
+src="https://upload.wikimedia.org/wikipedia/en/8/8e/Buster_Moon.png">
+
+<img class="character" style="top:20%" 
+src="https://upload.wikimedia.org/wikipedia/en/3/3d/Mike_Sing.png">
+
+<img class="character" style="top:70%" 
+src="https://upload.wikimedia.org/wikipedia/en/7/7f/Ash_Sing.png">
+
 
 <script>
 
