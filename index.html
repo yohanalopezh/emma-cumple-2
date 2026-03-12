@@ -9,13 +9,14 @@
 body{
     text-align:center;
     font-family: Arial;
-    background: linear-gradient(red, yellow, blue);
-    color:white;
+    background:white;
+    color:black;
     overflow:hidden;
 }
 
 h1{
     font-size:70px;
+    color:red;
     animation: zoom 2s infinite alternate;
 }
 
@@ -29,28 +30,35 @@ h1{
     margin-top:20px;
 }
 
+
+/* globos */
+
 .balloon{
     position:absolute;
     bottom:-100px;
     width:60px;
-    animation: float 10s infinite;
+    animation: float 12s infinite;
 }
 
 @keyframes float{
     from{bottom:-100px}
-    to{bottom:100%}
+    to{bottom:110%}
 }
+
+
+/* personajes */
 
 .character{
     position:absolute;
-    width:150px;
-    animation: appear 6s infinite;
+    width:140px;
+    animation: move 8s infinite;
 }
 
-@keyframes appear{
-    0%{opacity:0; transform:translateX(-200px)}
-    50%{opacity:1; transform:translateX(200px)}
-    100%{opacity:0; transform:translateX(600px)}
+@keyframes move{
+    0%{left:-150px; opacity:0}
+    30%{opacity:1}
+    70%{opacity:1}
+    100%{left:110%; opacity:0}
 }
 
 </style>
@@ -73,28 +81,37 @@ h1{
 
 
 <!-- MUSICA -->
+
 <audio autoplay loop>
-<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
+<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">
 </audio>
+
 
 
 <!-- GLOBOS -->
 
-<img class="balloon" style="left:10%" src="https://i.imgur.com/7Qp7R.png">
-<img class="balloon" style="left:40%" src="https://i.imgur.com/7Qp7R.png">
-<img class="balloon" style="left:70%" src="https://i.imgur.com/7Qp7R.png">
+<img class="balloon" style="left:10%" 
+src="https://upload.wikimedia.org/wikipedia/commons/3/3f/Balloon_red.svg">
+
+<img class="balloon" style="left:40%" 
+src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Balloon_blue.svg">
+
+<img class="balloon" style="left:70%" 
+src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Balloon_yellow.svg">
 
 
-<!-- PERSONAJES SING -->
 
-<img class="character" style="top:50%" 
-src="https://upload.wikimedia.org/wikipedia/en/8/8e/Buster_Moon.png">
+<!-- PERSONAJES (estilo caricatura música) -->
 
 <img class="character" style="top:20%" 
-src="https://upload.wikimedia.org/wikipedia/en/3/3d/Mike_Sing.png">
+src="https://upload.wikimedia.org/wikipedia/commons/7/70/Music_Notes.svg">
+
+<img class="character" style="top:50%" 
+src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Microphone_icon.svg">
 
 <img class="character" style="top:70%" 
-src="https://upload.wikimedia.org/wikipedia/en/7/7f/Ash_Sing.png">
+src="https://upload.wikimedia.org/wikipedia/commons/0/02/Star_icon-72a7cf.svg">
+
 
 
 <script>
