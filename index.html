@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Emma cumple 2</title>
+
+<style>
+body {
+    text-align:center;
+    font-family: Arial;
+    background: linear-gradient(red, yellow, blue);
+    color:white;
+}
+
+h1 {
+    font-size:60px;
+}
+
+#countdown {
+    font-size:40px;
+    margin-top:20px;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>🎤 EMMA CUMPLE 2 🎤</h1>
+
+<p>Te invitamos a celebrar con nosotros</p>
+
+<p>
+📅 11 Abril 2026<br>
+⏰ 15:30<br>
+📍 Cerro Lila 6200 Casa 13 Peñalolén
+</p>
+
+<div id="countdown"></div>
+
+<audio autoplay loop>
+<source src="https://www2.cs.uic.edu/~i101/SoundFiles/StarWars60.wav">
+</audio>
+
+<script>
+
+var countDownDate = new Date("Apr 11, 2026 15:30:00").getTime();
+
+var x = setInterval(function() {
+
+var now = new Date().getTime();
+
+var distance = countDownDate - now;
+
+var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+
+var hours = Math.floor((distance % (1000*60*60*24)) / (1000*60*60));
+
+var minutes = Math.floor((distance % (1000*60*60)) / (1000*60));
+
+document.getElementById("countdown").innerHTML =
+"Faltan " + days + " días " + hours + " horas " + minutes + " min";
+
+}, 1000);
+
+</script>
+
+</body>
+</html>
