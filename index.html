@@ -22,10 +22,9 @@
 
         body {
             background-color: #000;
-            /* FONDO INICIAL: TU TELÓN */
             background-image: url('https://i.ibb.co/gL6SqBFX/telon.png'); 
             background-size: cover;
-            background-position: center bottom;
+            background-position: center; 
             background-repeat: no-repeat;
             overflow: hidden;
             height: 100vh;
@@ -102,55 +101,64 @@
             50% { transform: scale(1.05); }
         }
 
-        /* --- INTERFAZ DEL JUEGO --- */
+        /* --- INTERFAZ DEL JUEGO (También sin fondo para no tapar) --- */
         #game-ui {
             position: absolute;
-            bottom: 8%; /* Movido a la parte inferior */
+            top: 5%; /* Arriba, estratégico */
             left: 50%;
             transform: translateX(-50%);
             z-index: 100;
             text-align: center;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 15px 30px;
-            border-radius: 30px;
-            border: 5px dashed var(--blue);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            animation: slideUp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: transparent; /* Sin fondo */
+            width: 100%;
+            animation: slideDown 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* Animación para que suba desde abajo en lugar de caer de arriba */
-        @keyframes slideUp {
-            from { bottom: -20%; opacity: 0; }
-            to { bottom: 8%; opacity: 1; }
+        @keyframes slideDown {
+            from { top: -20%; opacity: 0; }
+            to { top: 5%; opacity: 1; }
         }
 
-        #game-ui h2 { color: var(--red); font-family: 'Chewy', cursive; font-size: 1.8rem; margin-bottom: 5px; }
-        #game-ui p { color: #444; font-size: 1.1rem; font-weight: bold; margin-bottom: 10px; }
+        #game-ui h2 { 
+            color: var(--yellow); 
+            font-family: 'Chewy', cursive; 
+            font-size: 2.2rem; 
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 0 #d60000, -1px -1px 0 #d60000, 1px -1px 0 #d60000, -1px 1px 0 #d60000, 1px 1px 0 #d60000;
+        }
+        #game-ui p { 
+            color: white; 
+            font-size: 1.2rem; 
+            font-weight: bold; 
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+        }
         
         #score-board {
-            background: var(--yellow); color: #d60000; font-family: 'Chewy', cursive;
-            font-size: 2rem; padding: 5px 15px; border-radius: 20px;
-            display: inline-block; box-shadow: inset 0 3px 5px rgba(0,0,0,0.1);
+            background: var(--red); color: white; font-family: 'Chewy', cursive;
+            font-size: 2.2rem; padding: 5px 20px; border-radius: 20px;
+            border: 3px solid white;
+            display: inline-block; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
 
-        /* --- TARJETA PRINCIPAL CRISTAL --- */
+        /* --- TARJETA PRINCIPAL (SIN FONDO) --- */
         #card-wrapper {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             display: flex; 
-            align-items: flex-end; /* Alinea la tarjeta en la parte inferior */
+            align-items: flex-start; /* Estratégico: En la parte superior */
             justify-content: center;
-            padding-bottom: 8%; /* Espacio para que no quede pegada al borde inferior */
+            padding-top: 8vh; /* Bajamos un poquito desde el techo */
             z-index: 150; transform-style: preserve-3d;
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.65);
-            backdrop-filter: blur(8px);
-            width: 85%; max-width: 360px;
-            padding: 20px 15px;
-            border-radius: 30px; border: 5px solid var(--yellow);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            background: transparent; /* Fondo eliminado */
+            backdrop-filter: none; /* Cristal eliminado */
+            width: 95%; max-width: 400px;
+            padding: 10px;
+            border: none; /* Borde eliminado */
+            box-shadow: none; /* Sombra eliminada */
             text-align: center;
             animation: popIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
         }
@@ -161,32 +169,57 @@
         }
 
         .title {
-            font-family: 'Chewy', cursive; font-size: 3.5rem;
-            color: var(--red); text-shadow: 2px 2px 0px white, 4px 4px 0px var(--yellow);
+            font-family: 'Chewy', cursive; font-size: 4rem;
+            color: var(--yellow); 
+            text-shadow: 3px 3px 0px #d60000, -1px -1px 0 #d60000, 1px -1px 0 #d60000, -1px 1px 0 #d60000, 1px 1px 0 #d60000, 5px 5px 15px rgba(0,0,0,0.8);
             line-height: 0.9; margin-bottom: 10px; transform: rotate(-3deg);
         }
 
-        .subtitle { font-size: 1.1rem; color: #333; margin-bottom: 15px; font-weight: 700; }
+        /* Contorno negro grueso para que se lea en cualquier fondo */
+        .subtitle { 
+            font-size: 1.4rem; 
+            color: white; 
+            margin-bottom: 15px; 
+            font-weight: 700; 
+            text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 4px 10px rgba(0,0,0,0.8);
+        }
 
         .countdown { display: flex; justify-content: center; gap: 8px; margin-bottom: 15px; }
         .time-box {
             background: var(--red); color: white; border-radius: 12px; padding: 8px;
-            min-width: 55px; box-shadow: 0 4px 0 #cc0000;
+            min-width: 55px; box-shadow: 0 4px 0 #880000, 0 8px 15px rgba(0,0,0,0.5);
+            border: 2px solid white;
         }
-        .time-box span { display: block; font-size: 1.6rem; font-family: 'Chewy', cursive; line-height: 1; }
-        .time-box small { font-size: 0.7rem; font-weight: bold; }
+        .time-box span { display: block; font-size: 1.8rem; font-family: 'Chewy', cursive; line-height: 1; }
+        .time-box small { font-size: 0.8rem; font-weight: bold; }
 
         .info-box {
-            background: rgba(255, 249, 230, 0.85);
-            padding: 12px; border-radius: 15px; border: 3px solid #ffeba3;
-            text-align: left; margin-top: 10px;
+            background: transparent; /* Sin fondo */
+            padding: 5px; border: none;
+            text-align: center; margin-top: 5px;
         }
-        .info-box p { font-size: 1.1rem; margin: 6px 0; color: #444; }
+        
+        /* Textos de información con contorno para resaltar */
+        .info-box p { 
+            font-size: 1.4rem; 
+            margin: 10px 0; 
+            color: white; 
+            font-family: 'Fredoka', sans-serif;
+            text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 5px 10px rgba(0,0,0,0.8);
+        }
 
         .btn-next {
             background: var(--blue); color: white; border: 3px solid white;
-            padding: 10px 25px; font-size: 1.3rem; font-family: 'Chewy', cursive;
-            border-radius: 25px; cursor: pointer; box-shadow: 0 4px 0 #0044cc; margin-top: 10px;
+            padding: 12px 30px; font-size: 1.4rem; font-family: 'Chewy', cursive;
+            border-radius: 30px; cursor: pointer; 
+            box-shadow: 0 5px 0 #0044cc, 0 10px 20px rgba(0,0,0,0.5); 
+            margin-top: 15px;
+            text-transform: uppercase;
+        }
+
+        .btn-next:active {
+            transform: translateY(5px);
+            box-shadow: 0 0 0 #0044cc;
         }
 
         /* --- GLOBOS --- */
@@ -207,7 +240,6 @@
         .balloon::after {
             content: ''; position: absolute; bottom: -60px; left: 50%; transform: translateX(-50%);
             width: 16px; height: 60px;
-            /* CINTA ONDULADA DEL GLOBO */
             background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 60'%3E%3Cpath d='M8,0 Q16,6 8,12 T8,24 T8,36 T8,48 T8,60' fill='none' stroke='rgba(255,255,255,0.8)' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
         }
@@ -234,6 +266,9 @@
         .confetti { position: absolute; width: 12px; height: 12px; border-radius: 3px; z-index: 200; animation: fall 4s linear forwards; }
         @keyframes fall { to { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
 
+        @media (max-aspect-ratio: 1/1) {
+            body { background-position: center top; }
+        }
     </style>
 </head>
 <body>
@@ -257,8 +292,8 @@
         <div class="card" id="invitation-card">
             
             <div id="step-personal">
-                <h1 class="title" id="greeting-title" style="font-size: 3.5rem;">¡Hola!</h1>
-                <p class="subtitle" style="background: none; padding: 0;">Faltan exactamente:</p>
+                <h1 class="title" id="greeting-title">¡Hola!</h1>
+                <p class="subtitle">Faltan exactamente:</p>
                 
                 <div class="countdown">
                     <div class="time-box"><span id="days">00</span><small>Días</small></div>
@@ -267,14 +302,14 @@
                     <div class="time-box"><span id="seconds">00</span><small>Seg</small></div>
                 </div>
 
-                <p class="subtitle" id="greeting-end" style="font-weight: bold; color: var(--red);">¡Para divertirnos juntos! 🎈</p>
+                <p class="subtitle" id="greeting-end">¡Para divertirnos juntos! 🎈</p>
                 <br>
-                <button class="btn-next" id="btn-info">Ver Información de la Fiesta</button>
+                <button class="btn-next" id="btn-info">Info de la Fiesta</button>
             </div>
 
             <div id="step-info" style="display:none;">
                 <h1 class="title">¡Emma<br>cumple 2!</h1>
-                <p class="subtitle" style="background: none; padding:0;">¡El gran show te espera!</p>
+                <p class="subtitle">¡El gran show te espera!</p>
                 
                 <div class="info-box">
                     <p>📅 <strong>11 de Abril de 2026</strong></p>
