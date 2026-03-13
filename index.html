@@ -1,5 +1,4 @@
 
-<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -23,7 +22,7 @@
 
         body {
             background-color: #000;
-            /* Fondo de Telón */
+            /* FONDO INICIAL: TU TELÓN */
             background-image: url('https://i.ibb.co/gL6SqBFX/telon.png'); 
             background-size: cover;
             background-position: center bottom;
@@ -32,16 +31,19 @@
             height: 100vh;
             width: 100vw;
             perspective: 800px;
+            transition: background-image 0.5s ease-in-out;
         }
 
         .stage-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.6) 100%);
+            background: radial-gradient(circle at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.5) 100%);
             z-index: 1;
+            pointer-events: none;
+            transition: opacity 1s;
         }
 
-        /* --- TELONES DE TEATRO --- */
+        /* --- TELONES DE TEATRO ROJOS --- */
         #curtain-left, #curtain-right {
             position: fixed;
             top: 0;
@@ -59,7 +61,7 @@
         .curtain-open-left { transform: translateX(-110%); }
         .curtain-open-right { transform: translateX(110%); }
 
-        /* --- BOTÓN DE INICIO VIP --- */
+        /* --- BOTÓN DE INICIO --- */
         #start-btn-container {
             position: fixed;
             top: 50%; left: 50%;
@@ -95,10 +97,15 @@
             text-shadow: 2px 2px 5px #000;
         }
 
+        @keyframes bounceBtn {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
         /* --- INTERFAZ DEL JUEGO --- */
         #game-ui {
             position: absolute;
-            top: 10%;
+            bottom: 8%; /* Movido a la parte inferior */
             left: 50%;
             transform: translateX(-50%);
             z-index: 100;
@@ -108,179 +115,104 @@
             border-radius: 30px;
             border: 5px dashed var(--blue);
             box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            animation: slideDown 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            /* Achicamos el tamaño del texto */
-            font-size: 0.9em; 
+            animation: slideUp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        @keyframes slideDown {
-            from { top: -20%; opacity: 0; }
-            to { top: 10%; opacity: 1; }
+        /* Animación para que suba desde abajo en lugar de caer de arriba */
+        @keyframes slideUp {
+            from { bottom: -20%; opacity: 0; }
+            to { bottom: 8%; opacity: 1; }
         }
 
-        #game-ui h2 {
-            color: var(--red);
-            font-family: 'Chewy', cursive;
-            font-size: 1.8rem;
-            margin-bottom: 5px;
-        }
-
-        #game-ui p {
-            color: #444;
-            font-size: 1.1rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
+        #game-ui h2 { color: var(--red); font-family: 'Chewy', cursive; font-size: 1.8rem; margin-bottom: 5px; }
+        #game-ui p { color: #444; font-size: 1.1rem; font-weight: bold; margin-bottom: 10px; }
+        
         #score-board {
-            background: var(--yellow);
-            color: #d60000;
-            font-family: 'Chewy', cursive;
-            font-size: 2rem;
-            padding: 5px 15px;
-            border-radius: 20px;
-            display: inline-block;
-            box-shadow: inset 0 3px 5px rgba(0,0,0,0.1);
+            background: var(--yellow); color: #d60000; font-family: 'Chewy', cursive;
+            font-size: 2rem; padding: 5px 15px; border-radius: 20px;
+            display: inline-block; box-shadow: inset 0 3px 5px rgba(0,0,0,0.1);
         }
 
-        /* --- TARJETA PRINCIPAL (Oculta hasta ganar) --- */
+        /* --- TARJETA PRINCIPAL CRISTAL --- */
         #card-wrapper {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            display: flex;
-            align-items: center;
+            display: flex; 
+            align-items: flex-end; /* Alinea la tarjeta en la parte inferior */
             justify-content: center;
-            z-index: 150;
-            transform-style: preserve-3d;
+            padding-bottom: 8%; /* Espacio para que no quede pegada al borde inferior */
+            z-index: 150; transform-style: preserve-3d;
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.95);
-            width: 85%; /* Se reduce el ancho de 90 a 85% */
-            max-width: 360px; /* Reducimos el ancho máximo */
-            padding: 20px 15px; /* Reducimos el padding interior */
-            border-radius: 30px;
-            border: 5px solid var(--yellow);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 20px rgba(255, 204, 0, 0.3);
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(8px);
+            width: 85%; max-width: 360px;
+            padding: 20px 15px;
+            border-radius: 30px; border: 5px solid var(--yellow);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             text-align: center;
-            transform: translateZ(40px);
-            position: relative;
             animation: popIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
         }
 
         @keyframes popIn {
-            0% { transform: scale(0) translateZ(40px); opacity: 0; }
-            100% { transform: scale(1) translateZ(40px); opacity: 1; }
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
 
         .title {
-            font-family: 'Chewy', cursive;
-            font-size: 3.5rem; /* Letras un poco más pequeñas */
-            color: var(--red);
-            text-shadow: 2px 2px 0px white, 4px 4px 0px var(--yellow);
-            line-height: 0.9;
-            margin-bottom: 10px;
-            transform: rotate(-3deg);
+            font-family: 'Chewy', cursive; font-size: 3.5rem;
+            color: var(--red); text-shadow: 2px 2px 0px white, 4px 4px 0px var(--yellow);
+            line-height: 0.9; margin-bottom: 10px; transform: rotate(-3deg);
         }
 
-        .subtitle {
-            font-size: 1.1rem; /* Texto un poco más pequeño */
-            color: #444;
-            margin-bottom: 15px;
-            font-weight: 700;
-        }
+        .subtitle { font-size: 1.1rem; color: #333; margin-bottom: 15px; font-weight: 700; }
 
-        .countdown {
-            display: flex;
-            justify-content: center;
-            gap: 8px; /* Menos espacio entre las cajas */
-            margin-bottom: 15px;
-        }
-
+        .countdown { display: flex; justify-content: center; gap: 8px; margin-bottom: 15px; }
         .time-box {
-            background: var(--red);
-            color: white;
-            border-radius: 12px;
-            padding: 8px; /* Menos padding */
-            min-width: 55px; /* Cajas más estrechas */
-            box-shadow: 0 4px 0 #cc0000;
+            background: var(--red); color: white; border-radius: 12px; padding: 8px;
+            min-width: 55px; box-shadow: 0 4px 0 #cc0000;
         }
-
-        .time-box span {
-            display: block;
-            font-size: 1.6rem; /* Números más pequeños */
-            font-family: 'Chewy', cursive;
-            line-height: 1;
-        }
+        .time-box span { display: block; font-size: 1.6rem; font-family: 'Chewy', cursive; line-height: 1; }
         .time-box small { font-size: 0.7rem; font-weight: bold; }
 
         .info-box {
-            background: #fff9e6;
-            padding: 12px;
-            border-radius: 15px;
-            border: 3px solid #ffeba3;
-            text-align: left;
-            margin-top: 10px;
+            background: rgba(255, 249, 230, 0.85);
+            padding: 12px; border-radius: 15px; border: 3px solid #ffeba3;
+            text-align: left; margin-top: 10px;
         }
-
-        .info-box p {
-            font-size: 1.1rem;
-            margin: 6px 0;
-            color: #555;
-            display: flex;
-            align-items: center;
-        }
+        .info-box p { font-size: 1.1rem; margin: 6px 0; color: #444; }
 
         .btn-next {
-            background: var(--blue);
-            color: white;
-            border: 3px solid white;
-            padding: 10px 25px; /* Botón un poco más pequeño */
-            font-size: 1.3rem;
-            font-family: 'Chewy', cursive;
-            border-radius: 25px;
-            cursor: pointer;
-            box-shadow: 0 4px 0 #0044cc;
-            margin-top: 10px;
-        }
-        .btn-next:active {
-            transform: translateY(4px);
-            box-shadow: 0 0 0 #0044cc;
+            background: var(--blue); color: white; border: 3px solid white;
+            padding: 10px 25px; font-size: 1.3rem; font-family: 'Chewy', cursive;
+            border-radius: 25px; cursor: pointer; box-shadow: 0 4px 0 #0044cc; margin-top: 10px;
         }
 
         /* --- GLOBOS --- */
         #balloons-container {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 60; 
-            pointer-events: none;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 60; pointer-events: none;
         }
 
         .balloon {
-            position: absolute;
-            bottom: -100px;
-            width: 70px; /* Más grandes para tocarlos fácil */
-            height: 90px;
-            border-radius: 50%;
-            cursor: pointer;
-            pointer-events: auto;
+            position: absolute; bottom: -100px;
+            width: 70px; height: 90px; border-radius: 50%;
+            cursor: pointer; pointer-events: auto;
             animation: floatUp linear forwards;
             box-shadow: inset -10px -10px 15px rgba(0,0,0,0.15), inset 5px 5px 10px rgba(255,255,255,0.6);
             transition: transform 0.1s, opacity 0.2s;
         }
 
         .balloon::after {
-            content: '';
-            position: absolute;
-            bottom: -40px; left: 50%;
-            width: 2px; height: 40px;
-            background: rgba(255,255,255,0.4);
+            content: ''; position: absolute; bottom: -60px; left: 50%; transform: translateX(-50%);
+            width: 16px; height: 60px;
+            /* CINTA ONDULADA DEL GLOBO */
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 60'%3E%3Cpath d='M8,0 Q16,6 8,12 T8,24 T8,36 T8,48 T8,60' fill='none' stroke='rgba(255,255,255,0.8)' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
         }
 
-        .balloon.popped {
-            transform: scale(1.5) !important;
-            opacity: 0 !important;
-        }
+        .balloon.popped { transform: scale(1.5) !important; opacity: 0 !important; }
 
         @keyframes floatUp {
             0% { transform: translateY(0) rotate(-5deg); }
@@ -288,111 +220,42 @@
             100% { transform: translateY(-120vh) rotate(-5deg); }
         }
 
-        /* --- MINI CONFETI (AL REVENTAR GLOBO) --- */
+        /* --- CONFETI --- */
         .mini-confetti {
-            position: fixed; /* FIXED para asegurar que se vea donde se toca */
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999; /* Por encima de todo */
+            position: fixed; width: 10px; height: 10px; border-radius: 50%;
+            pointer-events: none; z-index: 9999;
             animation: popExplode 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
-
         @keyframes popExplode {
             0% { transform: translate(0, 0) scale(1); opacity: 1; }
             100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
         }
 
-        /* --- PERSONAJES --- */
-        .characters-layer {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 40; 
-            pointer-events: none;
-        }
-
-        .char-img {
-            position: absolute;
-            width: 140px; 
-            height: auto;
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.6));
-            opacity: 0; 
-        }
-
-        /* Coreografía de personajes */
-        .pair1-left { bottom: 10%; left: -20px; animation: slideInLeft 12s infinite; }
-        .pair1-right { bottom: 10%; right: -20px; animation: slideInRight 12s infinite; }
-        .pair2-left { top: 15%; left: -20px; animation: slideInLeft 12s infinite 6s; }
-        .pair2-right { top: 15%; right: -20px; animation: slideInRight 12s infinite 6s; }
-
-        @keyframes slideInLeft {
-            0%, 100% { transform: translateX(-150px) rotate(-10deg); opacity: 0; }
-            10% { transform: translateX(30px) rotate(5deg); opacity: 1; }
-            25% { transform: translateX(20px) rotate(-5deg); opacity: 1; }
-            40% { transform: translateX(30px) rotate(5deg); opacity: 1; }
-            50%, 95% { transform: translateX(-150px) rotate(-10deg); opacity: 0; }
-        }
-
-        @keyframes slideInRight {
-            0%, 100% { transform: translateX(150px) rotate(10deg); opacity: 0; }
-            10% { transform: translateX(-30px) rotate(-5deg); opacity: 1; }
-            25% { transform: translateX(-20px) rotate(5deg); opacity: 1; }
-            40% { transform: translateX(-30px) rotate(-5deg); opacity: 1; }
-            50%, 95% { transform: translateX(150px) rotate(10deg); opacity: 0; }
-        }
-
-        /* Gran Confeti Final */
-        .confetti {
-            position: absolute;
-            width: 12px; height: 12px;
-            border-radius: 3px;
-            z-index: 200;
-            animation: fall 4s linear forwards;
-        }
-        @keyframes fall {
-            to { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-        }
+        .confetti { position: absolute; width: 12px; height: 12px; border-radius: 3px; z-index: 200; animation: fall 4s linear forwards; }
+        @keyframes fall { to { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
 
     </style>
 </head>
 <body>
 
-    <!-- FONDO Y CAPA OSCURA -->
     <div class="stage-overlay"></div>
-
-    <!-- TELONES ROJOS -->
     <div id="curtain-left"></div>
     <div id="curtain-right"></div>
 
-    <!-- BOTÓN DE INICIO -->
     <div id="start-btn-container">
         <button id="play-btn" class="vip-button">¡Abrir Telón! 🎟️</button>
         <p class="instruction">¡Asegúrate de tener el volumen alto!</p>
     </div>
 
-    <!-- CAPA DE PERSONAJES -->
-    <!-- NOTA: Asegúrate de usar los enlaces directos (.png) que obtienes de tu ImgBB -->
-    <!-- Puedes agregar más personajes simplemente copiando una de estas líneas y cambiando la clase pairX-left o right -->
-    <div class="characters-layer" id="characters" style="display:none;">
-        <img src="https://i.ibb.co/Gv9Yz16w/coala-png.png" class="char-img pair1-left" alt="Buster Moon" onerror="this.style.display='none'">
-        <img src="https://i.ibb.co/WvvFG8TJ/elefante-png.png" class="char-img pair1-right" alt="Meena" onerror="this.style.display='none'">
-        <img src="https://i.ibb.co/Kc9VHXwM/ash-png.png" class="char-img pair2-left" alt="Ash" onerror="this.style.display='none'">
-        <img src="https://i.ibb.co/V0fKbK8v/jhony.png" class="char-img pair2-right" alt="Johnny" onerror="this.style.display='none'">
-    </div>
-
-    <!-- INTERFAZ DEL JUEGO -->
     <div id="game-ui" style="display: none;">
         <h2>¡Ayuda a preparar la fiesta!</h2>
         <p>Revienta 10 globos para ver la sorpresa</p>
         <div id="score-board">0 / 10</div>
     </div>
 
-    <!-- TARJETA PRINCIPAL (Se muestra al ganar) -->
     <div id="card-wrapper" style="display:none;">
         <div class="card" id="invitation-card">
             
-            <!-- SECCIÓN 1: MENSAJE PERSONALIZADO Y CONTADOR -->
             <div id="step-personal">
                 <h1 class="title" id="greeting-title" style="font-size: 3.5rem;">¡Hola!</h1>
                 <p class="subtitle" style="background: none; padding: 0;">Faltan exactamente:</p>
@@ -404,12 +267,11 @@
                     <div class="time-box"><span id="seconds">00</span><small>Seg</small></div>
                 </div>
 
-                <p class="subtitle" id="greeting-end" style="background: #e6f2ff;">¡Para divertirnos juntos! 🎈</p>
+                <p class="subtitle" id="greeting-end" style="font-weight: bold; color: var(--red);">¡Para divertirnos juntos! 🎈</p>
                 <br>
-                <button class="btn-next" onclick="mostrarInfoFiesta()">Ver Información de la Fiesta</button>
+                <button class="btn-next" id="btn-info">Ver Información de la Fiesta</button>
             </div>
 
-            <!-- SECCIÓN 2: INFORMACIÓN DE LA FIESTA -->
             <div id="step-info" style="display:none;">
                 <h1 class="title">¡Emma<br>cumple 2!</h1>
                 <p class="subtitle" style="background: none; padding:0;">¡El gran show te espera!</p>
@@ -424,124 +286,114 @@
         </div>
     </div>
 
-    <!-- CONTENEDOR DE GLOBOS -->
     <div id="balloons-container"></div>
 
     <script>
         const playBtn = document.getElementById('play-btn');
+        const btnInfo = document.getElementById('btn-info');
         
-        // Variables del juego
         let globosReventados = 0;
         const metaGlobos = 10;
         let juegoTerminado = false;
 
-        // --- 0. LECTURA DE DATOS PERSONALIZADOS (URL) ---
-        // Extrae ?nombre=Oriana&genero=f de la barra de direcciones
-        const urlParams = new URLSearchParams(window.location.search);
-        let nombreInvitado = urlParams.get('nombre');
-        let generoInvitado = urlParams.get('genero') || 'm';
+        // Lectura de parámetros de la URL
+        try {
+            const urlParams = new URLSearchParams(window.location.search);
+            let nombreInvitado = urlParams.get('nombre');
+            let generoInvitado = urlParams.get('genero') || 'm';
 
-        if (nombreInvitado) {
-            document.getElementById('greeting-title').innerText = '¡Hola ' + nombreInvitado + '!';
+            if (nombreInvitado && document.getElementById('greeting-title')) {
+                document.getElementById('greeting-title').innerText = '¡Hola ' + nombreInvitado + '!';
+            }
+            if (generoInvitado.toLowerCase() === 'f' && document.getElementById('greeting-end')) {
+                document.getElementById('greeting-end').innerText = '¡Para divertirnos juntas! 🎈';
+            }
+        } catch(e) {}
+
+        // Evento principal: Abrir Telón
+        if(playBtn) {
+            playBtn.addEventListener('click', () => {
+                document.getElementById('start-btn-container').style.display = 'none';
+                document.getElementById('curtain-left').classList.add('curtain-open-left');
+                document.getElementById('curtain-right').classList.add('curtain-open-right');
+
+                // CAMBIAR AL FONDO DE SING
+                document.body.style.backgroundImage = "url('https://i.ibb.co/CKxZkHd0/fondo-sing.png')";
+                
+                const overlay = document.querySelector('.stage-overlay');
+                if(overlay) overlay.style.opacity = '0';
+
+                setTimeout(() => {
+                    const gameUi = document.getElementById('game-ui');
+                    if(gameUi) gameUi.style.display = 'block';
+                    iniciarGlobos();
+                }, 500);
+            });
         }
-        if (generoInvitado.toLowerCase() === 'f') {
-            document.getElementById('greeting-end').innerText = '¡Para divertirnos juntas! 🎈';
+
+        // Evento: Ver información de la fiesta
+        if(btnInfo) {
+            btnInfo.addEventListener('click', () => {
+                document.getElementById('step-personal').style.display = 'none';
+                document.getElementById('step-info').style.display = 'block';
+            });
         }
 
-        // --- 1. APERTURA DEL SHOW ---
-        playBtn.addEventListener('click', () => {
-            document.getElementById('start-btn-container').style.display = 'none';
-            document.getElementById('curtain-left').classList.add('curtain-open-left');
-            document.getElementById('curtain-right').classList.add('curtain-open-right');
-
-            setTimeout(() => {
-                document.getElementById('characters').style.display = 'block';
-                document.getElementById('game-ui').style.display = 'block';
-                iniciarGlobos();
-            }, 500);
-        });
-
-        // --- 2. LÓGICA DE GLOBOS Y JUEGO ---
+        // Lógica de Globos
         function iniciarGlobos() {
             const colores = ['#ff3333', '#ffcc00', '#3399ff'];
             const container = document.getElementById('balloons-container');
 
             function crearGlobo() {
+                if(juegoTerminado) return;
                 const globo = document.createElement('div');
                 globo.classList.add('balloon');
                 globo.style.backgroundColor = colores[Math.floor(Math.random() * colores.length)];
                 globo.style.left = Math.random() * 80 + 'vw';
                 
-                const duracion = juegoTerminado ? (Math.random() * 3 + 3) : (Math.random() * 3 + 4); 
+                const duracion = Math.random() * 3 + 4; 
                 globo.style.animationDuration = duracion + 's';
                 
-                // --- EVENTO DE REVENTAR (Mouse y Touch) ---
-                function reventarGlobo(e) {
-                    if(globo.classList.contains('popped')) return; 
-                    globo.classList.add('popped');
+                globo.onclick = function() {
+                    if(this.classList.contains('popped')) return; 
+                    this.classList.add('popped');
                     
                     if (navigator.vibrate) navigator.vibrate(30);
 
-                    // Obtener coordenadas exactas del toque/clic
-                    let x, y;
-                    if(e.type === 'touchstart' && e.touches && e.touches.length > 0) {
-                        x = e.touches[0].clientX;
-                        y = e.touches[0].clientY;
-                    } else if (e.clientX !== undefined && e.clientY !== undefined) {
-                        x = e.clientX;
-                        y = e.clientY;
-                    } else {
-                        // Coordenadas de respaldo si no se pueden obtener del evento
-                        const rect = globo.getBoundingClientRect();
-                        x = rect.left + rect.width / 2;
-                        y = rect.top + rect.height / 2;
+                    const rect = this.getBoundingClientRect();
+                    const x = rect.left + rect.width / 2;
+                    const y = rect.top + rect.height / 2;
+
+                    crearPapelillos(x, y, this.style.backgroundColor);
+
+                    globosReventados++;
+                    const score = document.getElementById('score-board');
+                    if(score) score.innerText = `${globosReventados} / ${metaGlobos}`;
+                    
+                    if (globosReventados >= metaGlobos) {
+                        ganarJuego();
                     }
+                    
+                    setTimeout(() => { this.remove(); }, 200);
+                };
 
-                    // Crear papelillos al explotar usando las coordenadas exactas
-                    crearPapelillos(x, y, globo.style.backgroundColor);
-
-                    // Lógica del juego
-                    if (!juegoTerminado) {
-                        globosReventados++;
-                        document.getElementById('score-board').innerText = `${globosReventados} / ${metaGlobos}`;
-                        
-                        if (globosReventados >= metaGlobos) {
-                            ganarJuego();
-                        }
-                    }
-                    setTimeout(() => { globo.remove(); }, 200);
-                }
-
-                globo.addEventListener('mousedown', reventarGlobo);
-                globo.addEventListener('touchstart', function(e) {
-                    e.preventDefault(); // Evita que se dispare mousedown también en móviles
-                    reventarGlobo(e);
-                });
-
-                container.appendChild(globo);
-
-                setTimeout(() => {
-                    if (globo.parentNode) globo.remove();
-                }, duracion * 1000);
+                if(container) container.appendChild(globo);
+                setTimeout(() => { if (globo.parentNode) globo.remove(); }, duracion * 1000);
             }
-
             setInterval(crearGlobo, 450);
         }
 
-        // --- 3. EFECTO DE PAPELILLOS AL REVENTAR (CORREGIDO) ---
+        // Confeti al reventar el globo
         function crearPapelillos(x, y, bgColor) {
-            // Generar 15 pedacitos de confeti
             for(let i = 0; i < 15; i++) {
                 let conf = document.createElement('div');
                 conf.classList.add('mini-confetti');
                 conf.style.backgroundColor = bgColor;
-                
-                // Posicionar exactamente donde ocurrió el clic
                 conf.style.left = x + 'px';
                 conf.style.top = y + 'px';
                 
                 const angle = Math.random() * Math.PI * 2;
-                const distance = Math.random() * 80 + 20; // Radio de la explosión
+                const distance = Math.random() * 80 + 20; 
                 const tx = Math.cos(angle) * distance;
                 const ty = Math.sin(angle) * distance;
                 
@@ -549,27 +401,24 @@
                 conf.style.setProperty('--ty', `${ty}px`);
                 
                 document.body.appendChild(conf);
-                
                 setTimeout(() => conf.remove(), 600);
             }
         }
 
-        // --- 4. ACCIÓN AL GANAR EL JUEGO ---
+        // Ganar Juego
         function ganarJuego() {
             juegoTerminado = true;
-            document.getElementById('game-ui').style.display = 'none';
-            document.getElementById('card-wrapper').style.display = 'flex';
+            const gameUi = document.getElementById('game-ui');
+            const cardWrapper = document.getElementById('card-wrapper');
+            
+            if(gameUi) gameUi.style.display = 'none';
+            if(cardWrapper) cardWrapper.style.display = 'flex';
+            
             dispararGranConfeti();
             iniciarContador();
         }
 
-        // --- 5. TRANSICIÓN A LA INFO DE LA FIESTA ---
-        function mostrarInfoFiesta() {
-            document.getElementById('step-personal').style.display = 'none';
-            document.getElementById('step-info').style.display = 'block';
-        }
-
-        // --- 6. GRAN CONFETI FINAL ---
+        // Gran confeti de celebración
         function dispararGranConfeti() {
             const colors = ['#ff3333', '#ffcc00', '#3399ff', '#ffffff'];
             for(let i=0; i<80; i++) {
@@ -585,24 +434,27 @@
             }
         }
 
-        // --- 7. CONTADOR REGRESIVO ---
+        // Contador de cuenta regresiva
         function iniciarContador() {
             const eventDate = new Date("April 11, 2026 15:30:00").getTime();
-
             setInterval(function() {
                 const now = new Date().getTime();
                 const distance = eventDate - now;
-
                 if (distance > 0) {
                     const days = Math.floor(distance / (1000 * 60 * 60 * 24));
                     const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                    document.getElementById("days").innerText = days.toString().padStart(2, '0');
-                    document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
-                    document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
-                    document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
+                    const dEl = document.getElementById("days");
+                    const hEl = document.getElementById("hours");
+                    const mEl = document.getElementById("minutes");
+                    const sEl = document.getElementById("seconds");
+
+                    if(dEl) dEl.innerText = days.toString().padStart(2, '0');
+                    if(hEl) hEl.innerText = hours.toString().padStart(2, '0');
+                    if(mEl) mEl.innerText = minutes.toString().padStart(2, '0');
+                    if(sEl) sEl.innerText = seconds.toString().padStart(2, '0');
                 }
             }, 1000);
         }
