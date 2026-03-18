@@ -30,13 +30,13 @@
             height: 100vh;
             width: 100vw;
             perspective: 800px;
-            transition: background-image 0.5s ease-in-out;
+            transition: background-image 1s ease-in-out;
         }
 
         .stage-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.5) 100%);
+            background: radial-gradient(circle at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6) 100%);
             z-index: 1;
             pointer-events: none;
             transition: opacity 1s;
@@ -101,15 +101,15 @@
             50% { transform: scale(1.05); }
         }
 
-        /* --- INTERFAZ DEL JUEGO (También sin fondo para no tapar) --- */
+        /* --- INTERFAZ DEL JUEGO --- */
         #game-ui {
             position: absolute;
-            top: 5%; /* Arriba, estratégico */
+            top: 5%;
             left: 50%;
             transform: translateX(-50%);
             z-index: 100;
             text-align: center;
-            background: transparent; /* Sin fondo */
+            background: transparent;
             width: 100%;
             animation: slideDown 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
@@ -120,130 +120,161 @@
         }
 
         #game-ui h2 { 
-            color: var(--yellow); 
-            font-family: 'Chewy', cursive; 
-            font-size: 2.2rem; 
-            margin-bottom: 5px;
+            color: var(--yellow); font-family: 'Chewy', cursive; font-size: 2.2rem; margin-bottom: 5px;
             text-shadow: 2px 2px 0 #d60000, -1px -1px 0 #d60000, 1px -1px 0 #d60000, -1px 1px 0 #d60000, 1px 1px 0 #d60000;
         }
         #game-ui p { 
-            color: white; 
-            font-size: 1.2rem; 
-            font-weight: bold; 
-            margin-bottom: 15px;
+            color: white; font-size: 1.2rem; font-weight: bold; margin-bottom: 15px;
             text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
         }
         
         #score-board {
             background: var(--red); color: white; font-family: 'Chewy', cursive;
             font-size: 2.2rem; padding: 5px 20px; border-radius: 20px;
-            border: 3px solid white;
-            display: inline-block; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            border: 3px solid white; display: inline-block; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
 
-        /* --- TARJETA PRINCIPAL (SIN FONDO) --- */
+        /* --- PANTALLA: PREGUNTA CANTAR JUNTOS --- */
+        #step-sing-together {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 120; text-align: center;
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(3px);
+            animation: fadeIn 1s;
+        }
+
+        #step-sing-together h1 {
+            color: white; font-family: 'Chewy', cursive; font-size: 3.5rem;
+            text-shadow: 3px 3px 0 #d60000, 0 5px 15px rgba(0,0,0,0.8); margin-bottom: 10px; line-height: 1;
+        }
+
+        #step-sing-together h2 {
+            color: var(--yellow); font-family: 'Chewy', cursive; font-size: 2.5rem;
+            text-shadow: 2px 2px 0 #000, 0 5px 10px rgba(0,0,0,0.8); margin-bottom: 30px;
+        }
+
+        /* --- PANTALLA: VIDEO (DISEÑO DE ENLACE VISUAL) --- */
+        #step-video {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); z-index: 130;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            animation: fadeIn 0.5s;
+        }
+
+        .video-title {
+            color: var(--yellow); font-family: 'Chewy', cursive; font-size: 2.8rem;
+            text-shadow: 2px 2px 0 #d60000, 0 5px 10px rgba(0,0,0,0.8); margin-bottom: 20px;
+            text-align: center; line-height: 1.1;
+        }
+
+        .video-link-card {
+            display: block; text-decoration: none;
+            background: linear-gradient(135deg, #ff3333, #990000);
+            padding: 20px; border-radius: 20px;
+            border: 4px solid white;
+            box-shadow: 0 10px 30px rgba(255,51,51,0.4);
+            transition: transform 0.2s;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .video-link-card:active {
+            transform: scale(0.95);
+        }
+
+        .video-thumbnail {
+            background: #000;
+            width: 250px; height: 140px;
+            border-radius: 12px;
+            display: flex; justify-content: center; align-items: center;
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid var(--yellow);
+        }
+
+        /* Fondo musical para la miniatura */
+        .video-thumbnail::before {
+             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+             background-image: url('https://images.unsplash.com/photo-1470229722913-7c090be5c520?q=80&w=400&auto=format&fit=crop');
+             background-size: cover; opacity: 0.5;
+        }
+
+        .play-icon {
+            font-size: 4rem; z-index: 2;
+            animation: pulsePlay 1.5s infinite;
+            filter: drop-shadow(0 4px 5px rgba(0,0,0,0.8));
+        }
+
+        @keyframes pulsePlay {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .video-link-card p {
+            color: white; font-family: 'Fredoka', sans-serif; font-size: 1.3rem; font-weight: bold;
+            margin: 0; text-shadow: 1px 1px 2px #000;
+        }
+
+        /* --- PANTALLA FINAL: INFO FIESTA --- */
         #card-wrapper {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; 
-            align-items: flex-start; /* Estratégico: En la parte superior */
-            justify-content: center;
-            padding-top: 8vh; /* Bajamos un poquito desde el techo */
-            z-index: 150; transform-style: preserve-3d;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; align-items: flex-start; justify-content: center;
+            padding-top: 6vh; z-index: 150; transform-style: preserve-3d;
         }
 
         .card {
-            background: transparent; /* Fondo eliminado */
-            backdrop-filter: none; /* Cristal eliminado */
-            width: 95%; max-width: 400px;
-            padding: 10px;
-            border: none; /* Borde eliminado */
-            box-shadow: none; /* Sombra eliminada */
-            text-align: center;
-            animation: popIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
+            background: transparent; width: 95%; max-width: 400px; padding: 10px;
+            text-align: center; animation: popIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
         }
 
-        @keyframes popIn {
-            0% { transform: scale(0); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
+        @keyframes popIn { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
 
         .title {
-            font-family: 'Chewy', cursive; font-size: 4rem;
-            color: var(--yellow); 
+            font-family: 'Chewy', cursive; font-size: 3.5rem; color: var(--yellow); 
             text-shadow: 3px 3px 0px #d60000, -1px -1px 0 #d60000, 1px -1px 0 #d60000, -1px 1px 0 #d60000, 1px 1px 0 #d60000, 5px 5px 15px rgba(0,0,0,0.8);
             line-height: 0.9; margin-bottom: 10px; transform: rotate(-3deg);
         }
 
-        /* Contorno negro grueso para que se lea en cualquier fondo */
         .subtitle { 
-            font-size: 1.4rem; 
-            color: white; 
-            margin-bottom: 15px; 
-            font-weight: 700; 
+            font-size: 1.4rem; color: white; margin-bottom: 15px; font-weight: 700; 
             text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 4px 10px rgba(0,0,0,0.8);
         }
 
         .countdown { display: flex; justify-content: center; gap: 8px; margin-bottom: 15px; }
         .time-box {
             background: var(--red); color: white; border-radius: 12px; padding: 8px;
-            min-width: 55px; box-shadow: 0 4px 0 #880000, 0 8px 15px rgba(0,0,0,0.5);
-            border: 2px solid white;
+            min-width: 55px; box-shadow: 0 4px 0 #880000, 0 8px 15px rgba(0,0,0,0.5); border: 2px solid white;
         }
         .time-box span { display: block; font-size: 1.8rem; font-family: 'Chewy', cursive; line-height: 1; }
         .time-box small { font-size: 0.8rem; font-weight: bold; }
 
-        .info-box {
-            background: transparent; /* Sin fondo */
-            padding: 5px; border: none;
-            text-align: center; margin-top: 5px;
-        }
-        
-        /* Textos de información con contorno para resaltar */
         .info-box p { 
-            font-size: 1.4rem; 
-            margin: 10px 0; 
-            color: white; 
-            font-family: 'Fredoka', sans-serif;
+            font-size: 1.3rem; margin: 10px 0; color: white; font-family: 'Fredoka', sans-serif;
             text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 5px 10px rgba(0,0,0,0.8);
         }
 
         .btn-next {
             background: var(--blue); color: white; border: 3px solid white;
             padding: 12px 30px; font-size: 1.4rem; font-family: 'Chewy', cursive;
-            border-radius: 30px; cursor: pointer; 
-            box-shadow: 0 5px 0 #0044cc, 0 10px 20px rgba(0,0,0,0.5); 
-            margin-top: 15px;
-            text-transform: uppercase;
+            border-radius: 30px; cursor: pointer; box-shadow: 0 5px 0 #0044cc, 0 10px 20px rgba(0,0,0,0.5); 
+            margin-top: 15px; text-transform: uppercase; transition: transform 0.1s;
         }
-
-        .btn-next:active {
-            transform: translateY(5px);
-            box-shadow: 0 0 0 #0044cc;
-        }
+        .btn-next:active { transform: translateY(5px); box-shadow: 0 0 0 #0044cc; }
 
         /* --- GLOBOS --- */
-        #balloons-container {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 60; pointer-events: none;
-        }
-
+        #balloons-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 60; pointer-events: none; }
         .balloon {
-            position: absolute; bottom: -100px;
-            width: 70px; height: 90px; border-radius: 50%;
-            cursor: pointer; pointer-events: auto;
-            animation: floatUp linear forwards;
+            position: absolute; bottom: -100px; width: 70px; height: 90px; border-radius: 50%;
+            cursor: pointer; pointer-events: auto; animation: floatUp linear forwards;
             box-shadow: inset -10px -10px 15px rgba(0,0,0,0.15), inset 5px 5px 10px rgba(255,255,255,0.6);
-            transition: transform 0.1s, opacity 0.2s;
         }
-
         .balloon::after {
-            content: ''; position: absolute; bottom: -60px; left: 50%; transform: translateX(-50%);
-            width: 16px; height: 60px;
+            content: ''; position: absolute; bottom: -60px; left: 50%; transform: translateX(-50%); width: 16px; height: 60px;
             background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 60'%3E%3Cpath d='M8,0 Q16,6 8,12 T8,24 T8,36 T8,48 T8,60' fill='none' stroke='rgba(255,255,255,0.8)' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
         }
-
         .balloon.popped { transform: scale(1.5) !important; opacity: 0 !important; }
 
         @keyframes floatUp {
@@ -255,45 +286,66 @@
         /* --- CONFETI --- */
         .mini-confetti {
             position: fixed; width: 10px; height: 10px; border-radius: 50%;
-            pointer-events: none; z-index: 9999;
-            animation: popExplode 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            pointer-events: none; z-index: 9999; animation: popExplode 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
-        @keyframes popExplode {
-            0% { transform: translate(0, 0) scale(1); opacity: 1; }
-            100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
-        }
-
+        @keyframes popExplode { 0% { transform: translate(0, 0) scale(1); opacity: 1; } 100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; } }
         .confetti { position: absolute; width: 12px; height: 12px; border-radius: 3px; z-index: 200; animation: fall 4s linear forwards; }
         @keyframes fall { to { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
 
-        @media (max-aspect-ratio: 1/1) {
-            body { background-position: center top; }
-        }
+        @media (max-aspect-ratio: 1/1) { body { background-position: center top; } }
     </style>
 </head>
 <body>
+
+    <!-- MÚSICA DE FONDO DEL JUEGO (Libre de derechos) -->
+    <audio id="game-audio" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3" loop></audio>
 
     <div class="stage-overlay"></div>
     <div id="curtain-left"></div>
     <div id="curtain-right"></div>
 
+    <!-- ETAPA 0: BOTÓN DE INICIO -->
     <div id="start-btn-container">
         <button id="play-btn" class="vip-button">¡Abrir Telón! 🎟️</button>
-        <p class="instruction">¡Asegúrate de tener el volumen alto!</p>
+        <p class="instruction">¡Sube el volumen!</p>
     </div>
 
+    <!-- ETAPA 1: EL JUEGO -->
     <div id="game-ui" style="display: none;">
         <h2>¡Ayuda a preparar la fiesta!</h2>
         <p>Revienta 10 globos para ver la sorpresa</p>
         <div id="score-board">0 / 10</div>
     </div>
+    <div id="balloons-container"></div>
 
+    <!-- ETAPA 2: LA PREGUNTA -->
+    <div id="step-sing-together" style="display:none;">
+        <h1>¿Y si cantamos juntos?</h1>
+        <h2>¿Me acompañas?</h2>
+        <button class="btn-next" id="btn-go-video">¡Claro que sí! 🎤</button>
+    </div>
+
+    <!-- ETAPA 3: EL VIDEO (Botón visual hacia YouTube) -->
+    <div id="step-video" style="display:none;">
+        <h2 class="video-title">¡Mira este video<br>sorpresa!</h2>
+        
+        <a href="https://www.youtube.com/shorts/oR2ZU-hvJ28" target="_blank" class="video-link-card">
+            <div class="video-thumbnail">
+                <div class="play-icon">▶️</div>
+            </div>
+            <p>Toca para ver en YouTube 🎬</p>
+        </a>
+
+        <button class="btn-next" id="btn-show-info">Ver Información de la Fiesta ✨</button>
+    </div>
+
+    <!-- ETAPA 4: LA GRAN REVELACIÓN (Info) -->
     <div id="card-wrapper" style="display:none;">
         <div class="card" id="invitation-card">
             
-            <div id="step-personal">
-                <h1 class="title" id="greeting-title">¡Hola!</h1>
-                <p class="subtitle">Faltan exactamente:</p>
+            <!-- ETAPA 4: INFORMACIÓN Y CONTADOR -->
+            <div id="step-info">
+                <h1 class="title">¡Emma<br>cumple 2!</h1>
                 
                 <div class="countdown">
                     <div class="time-box"><span id="days">00</span><small>Días</small></div>
@@ -302,79 +354,91 @@
                     <div class="time-box"><span id="seconds">00</span><small>Seg</small></div>
                 </div>
 
-                <p class="subtitle" id="greeting-end">¡Para divertirnos juntos! 🎈</p>
-                <br>
-                <button class="btn-next" id="btn-info">Info de la Fiesta</button>
-            </div>
-
-            <div id="step-info" style="display:none;">
-                <h1 class="title">¡Emma<br>cumple 2!</h1>
                 <p class="subtitle">¡El gran show te espera!</p>
                 
                 <div class="info-box">
                     <p>📅 <strong>11 de Abril de 2026</strong></p>
                     <p>⏰ <strong>15:30 hrs</strong></p>
-                    <p>📍 <strong>Lugar:</strong> Cualquier Cosa</p>
+                    <p>📍 <strong>Lugar:</strong> Cerro Lila 6200. Peñalolén. Casa 13.</p>
                 </div>
+                
+                <button class="btn-next" id="btn-go-confirm" style="margin-top: 15px;">Siguiente ➡️</button>
+            </div>
+
+            <!-- ETAPA 5: CONFIRMACIÓN DE ASISTENCIA -->
+            <div id="step-confirm" style="display:none;">
+                <h1 class="title">¡Te esperamos!</h1>
+                <p class="subtitle" style="font-size: 1.6rem; margin-top: 20px; line-height: 1.4;">Por favor confirma<br>tu asistencia<br>con mis papis.</p>
             </div>
 
         </div>
     </div>
 
-    <div id="balloons-container"></div>
-
     <script>
         const playBtn = document.getElementById('play-btn');
-        const btnInfo = document.getElementById('btn-info');
+        const btnGoVideo = document.getElementById('btn-go-video');
+        const btnShowInfo = document.getElementById('btn-show-info');
+        const btnGoConfirm = document.getElementById('btn-go-confirm');
+        const gameAudio = document.getElementById('game-audio');
         
         let globosReventados = 0;
         const metaGlobos = 10;
         let juegoTerminado = false;
 
-        // Lectura de parámetros de la URL
-        try {
-            const urlParams = new URLSearchParams(window.location.search);
-            let nombreInvitado = urlParams.get('nombre');
-            let generoInvitado = urlParams.get('genero') || 'm';
-
-            if (nombreInvitado && document.getElementById('greeting-title')) {
-                document.getElementById('greeting-title').innerText = '¡Hola ' + nombreInvitado + '!';
-            }
-            if (generoInvitado.toLowerCase() === 'f' && document.getElementById('greeting-end')) {
-                document.getElementById('greeting-end').innerText = '¡Para divertirnos juntas! 🎈';
-            }
-        } catch(e) {}
-
-        // Evento principal: Abrir Telón
+        // --- ETAPA 1: ABRIR TELÓN Y JUEGO ---
         if(playBtn) {
             playBtn.addEventListener('click', () => {
                 document.getElementById('start-btn-container').style.display = 'none';
                 document.getElementById('curtain-left').classList.add('curtain-open-left');
                 document.getElementById('curtain-right').classList.add('curtain-open-right');
 
-                // CAMBIAR AL FONDO DE SING
-                document.body.style.backgroundImage = "url('https://i.ibb.co/CKxZkHd0/fondo-sing.png')";
-                
-                const overlay = document.querySelector('.stage-overlay');
-                if(overlay) overlay.style.opacity = '0';
+                // Iniciar música del juego
+                gameAudio.volume = 0.6; // Volumen moderado
+                gameAudio.play().catch(e => console.log("Navegador bloqueó el audio automático"));
 
                 setTimeout(() => {
-                    const gameUi = document.getElementById('game-ui');
-                    if(gameUi) gameUi.style.display = 'block';
+                    document.getElementById('game-ui').style.display = 'block';
                     iniciarGlobos();
                 }, 500);
             });
         }
 
-        // Evento: Ver información de la fiesta
-        if(btnInfo) {
-            btnInfo.addEventListener('click', () => {
-                document.getElementById('step-personal').style.display = 'none';
-                document.getElementById('step-info').style.display = 'block';
+        // --- ETAPA 3: ACEPTAR CANTAR E IR AL VIDEO ---
+        if(btnGoVideo) {
+            btnGoVideo.addEventListener('click', () => {
+                document.getElementById('step-sing-together').style.display = 'none';
+                document.getElementById('step-video').style.display = 'flex';
+                // Ya no inyectamos iframe, el enlace HTML se encarga de abrir YouTube
             });
         }
 
-        // Lógica de Globos
+        // --- ETAPA 4: MOSTRAR INFORMACIÓN FINAL ---
+        if(btnShowInfo) {
+            btnShowInfo.addEventListener('click', () => {
+                document.getElementById('step-video').style.display = 'none';
+
+                // Aquí es donde cambia al fondo de SING que me enviaste
+                document.body.style.backgroundImage = "url('https://i.ibb.co/CKxZkHd0/fondo-sing.png')";
+                
+                const overlay = document.querySelector('.stage-overlay');
+                if(overlay) overlay.style.opacity = '0'; // Quita la sombra para que el fondo brille
+
+                // Muestra la tarjeta con la información en la parte superior
+                document.getElementById('card-wrapper').style.display = 'flex';
+                
+                iniciarContador();
+            });
+        }
+
+        // --- ETAPA 5: MOSTRAR CONFIRMACIÓN ---
+        if(btnGoConfirm) {
+            btnGoConfirm.addEventListener('click', () => {
+                document.getElementById('step-info').style.display = 'none';
+                document.getElementById('step-confirm').style.display = 'block';
+            });
+        }
+
+        // --- LÓGICA DE GLOBOS ---
         function iniciarGlobos() {
             const colores = ['#ff3333', '#ffcc00', '#3399ff'];
             const container = document.getElementById('balloons-container');
@@ -418,7 +482,7 @@
             setInterval(crearGlobo, 450);
         }
 
-        // Confeti al reventar el globo
+        // --- CONFETI MINI ---
         function crearPapelillos(x, y, bgColor) {
             for(let i = 0; i < 15; i++) {
                 let conf = document.createElement('div');
@@ -440,20 +504,21 @@
             }
         }
 
-        // Ganar Juego
+        // --- ETAPA 2: GANAR JUEGO ---
         function ganarJuego() {
             juegoTerminado = true;
-            const gameUi = document.getElementById('game-ui');
-            const cardWrapper = document.getElementById('card-wrapper');
             
-            if(gameUi) gameUi.style.display = 'none';
-            if(cardWrapper) cardWrapper.style.display = 'flex';
+            // Ocultar juego y detener música
+            document.getElementById('game-ui').style.display = 'none';
+            gameAudio.pause();
+
+            // Mostrar la pregunta
+            document.getElementById('step-sing-together').style.display = 'flex';
             
             dispararGranConfeti();
-            iniciarContador();
         }
 
-        // Gran confeti de celebración
+        // --- GRAN CONFETI ---
         function dispararGranConfeti() {
             const colors = ['#ff3333', '#ffcc00', '#3399ff', '#ffffff'];
             for(let i=0; i<80; i++) {
@@ -469,7 +534,7 @@
             }
         }
 
-        // Contador de cuenta regresiva
+        // --- CONTADOR ---
         function iniciarContador() {
             const eventDate = new Date("April 11, 2026 15:30:00").getTime();
             setInterval(function() {
