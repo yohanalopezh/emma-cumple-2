@@ -7,9 +7,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Fredoka:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --red: #ff3333;
+            --red: #e62424;
+            --dark-red: #990000;
             --yellow: #ffcc00;
+            --gold: #d4af37;
             --blue: #3399ff;
+            --dark-bg: #111;
         }
 
         * {
@@ -18,10 +21,11 @@
             padding: 0;
             user-select: none;
             font-family: 'Fredoka', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: #000;
+            background-color: var(--dark-bg);
             background-image: url('https://i.ibb.co/gL6SqBFX/telon.png'); 
             background-size: cover;
             background-position: center; 
@@ -30,16 +34,16 @@
             height: 100vh;
             width: 100vw;
             perspective: 800px;
-            transition: background-image 1s ease-in-out;
+            transition: background-image 1.5s ease-in-out;
         }
 
         .stage-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6) 100%);
+            background: radial-gradient(circle at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%);
             z-index: 1;
             pointer-events: none;
-            transition: opacity 1s;
+            transition: opacity 1.5s;
         }
 
         /* --- TELONES DE TEATRO ROJOS --- */
@@ -48,17 +52,23 @@
             top: 0;
             width: 51vw;
             height: 100vh;
-            background: linear-gradient(90deg, #cc0000 0%, #ff3333 50%, #e60000 100%);
+            background: linear-gradient(90deg, #b30000 0%, #ff1a1a 50%, #cc0000 100%);
             z-index: 2000;
-            transition: transform 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            box-shadow: 0 0 40px rgba(0,0,0,0.8);
+            transition: transform 1.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 0 50px rgba(0,0,0,0.9);
         }
         
-        #curtain-left { left: 0; transform-origin: left; border-right: 8px solid #990000; }
-        #curtain-right { right: 0; transform-origin: right; border-left: 8px solid #990000; }
+        #curtain-left { left: 0; transform-origin: left; border-right: 12px solid var(--dark-red); }
+        #curtain-right { right: 0; transform-origin: right; border-left: 12px solid var(--dark-red); }
 
         .curtain-open-left { transform: translateX(-110%); }
         .curtain-open-right { transform: translateX(110%); }
+
+        /* --- UTILIDADES DE ANIMACIÓN --- */
+        .fade-in { animation: fadeIn 0.8s forwards; }
+        .fade-out { animation: fadeOut 0.5s forwards; }
+        @keyframes fadeIn { from { opacity: 0; visibility: hidden; } to { opacity: 1; visibility: visible; } }
+        @keyframes fadeOut { from { opacity: 1; visibility: visible; } to { opacity: 0; visibility: hidden; } }
 
         /* --- BOTÓN DE INICIO --- */
         #start-btn-container {
@@ -71,45 +81,52 @@
         }
 
         .vip-button {
-            background: var(--yellow);
-            border: 6px solid white;
-            padding: 20px 40px;
-            font-size: 2.2rem;
+            background: linear-gradient(to bottom, #ffe066, #ffcc00);
+            border: 4px solid white;
+            padding: 20px 45px;
+            font-size: 2.5rem;
             font-family: 'Chewy', cursive;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 10px 0 #cc9900, 0 15px 30px rgba(0,0,0,0.6);
-            color: #d60000;
+            box-shadow: 0 10px 0 #b38f00, 0 15px 30px rgba(0,0,0,0.8);
+            color: var(--dark-red);
+            text-transform: uppercase;
+            letter-spacing: 2px;
             animation: bounceBtn 2s infinite;
+            transition: all 0.1s;
         }
 
         .vip-button:active { 
             transform: translateY(10px); 
-            box-shadow: 0 0 0 #cc9900, 0 5px 10px rgba(0,0,0,0.4); 
+            box-shadow: 0 0 0 #b38f00, 0 5px 10px rgba(0,0,0,0.4); 
         }
 
         .instruction {
             color: white;
-            margin-top: 25px;
-            font-size: 1.4rem;
-            font-family: 'Chewy', cursive;
-            text-shadow: 2px 2px 5px #000;
+            margin-top: 30px;
+            font-size: 1.5rem;
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 700;
+            text-shadow: 2px 2px 8px #000;
+            animation: pulseText 1.5s infinite;
         }
 
         @keyframes bounceBtn {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
         }
+        @keyframes pulseText {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
 
         /* --- INTERFAZ DEL JUEGO --- */
         #game-ui {
             position: absolute;
-            top: 5%;
-            left: 50%;
+            top: 5%; left: 50%;
             transform: translateX(-50%);
             z-index: 100;
             text-align: center;
-            background: transparent;
             width: 100%;
             animation: slideDown 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
@@ -120,162 +137,42 @@
         }
 
         #game-ui h2 { 
-            color: var(--yellow); font-family: 'Chewy', cursive; font-size: 2.2rem; margin-bottom: 5px;
-            text-shadow: 2px 2px 0 #d60000, -1px -1px 0 #d60000, 1px -1px 0 #d60000, -1px 1px 0 #d60000, 1px 1px 0 #d60000;
+            color: var(--yellow); font-family: 'Chewy', cursive; font-size: 2.5rem; margin-bottom: 5px;
+            text-shadow: 3px 3px 0 var(--dark-red), -1px -1px 0 var(--dark-red), 1px -1px 0 var(--dark-red), -1px 1px 0 var(--dark-red), 1px 1px 0 var(--dark-red), 0 5px 15px rgba(0,0,0,0.5);
+            letter-spacing: 1px;
         }
         #game-ui p { 
-            color: white; font-size: 1.2rem; font-weight: bold; margin-bottom: 15px;
-            text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+            color: white; font-size: 1.3rem; font-weight: bold; margin-bottom: 15px;
+            text-shadow: 2px 2px 4px #000;
         }
         
         #score-board {
-            background: var(--red); color: white; font-family: 'Chewy', cursive;
-            font-size: 2.2rem; padding: 5px 20px; border-radius: 20px;
-            border: 3px solid white; display: inline-block; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            background: linear-gradient(to bottom, var(--red), var(--dark-red)); 
+            color: white; font-family: 'Chewy', cursive;
+            font-size: 2.5rem; padding: 5px 30px; border-radius: 30px;
+            border: 3px solid var(--yellow); display: inline-block; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.6), inset 0 2px 5px rgba(255,255,255,0.4);
         }
-
-        /* --- PANTALLA: PREGUNTA CANTAR JUNTOS --- */
-        #step-sing-together {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 120; text-align: center;
-            background: rgba(0,0,0,0.7); backdrop-filter: blur(3px);
-            animation: fadeIn 1s;
-        }
-
-        #step-sing-together h1 {
-            color: white; font-family: 'Chewy', cursive; font-size: 3.5rem;
-            text-shadow: 3px 3px 0 #d60000, 0 5px 15px rgba(0,0,0,0.8); margin-bottom: 10px; line-height: 1;
-        }
-
-        #step-sing-together h2 {
-            color: var(--yellow); font-family: 'Chewy', cursive; font-size: 2.5rem;
-            text-shadow: 2px 2px 0 #000, 0 5px 10px rgba(0,0,0,0.8); margin-bottom: 30px;
-        }
-
-        /* --- PANTALLA: VIDEO (DISEÑO DE ENLACE VISUAL) --- */
-        #step-video {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); z-index: 130;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            animation: fadeIn 0.5s;
-        }
-
-        .video-title {
-            color: var(--yellow); font-family: 'Chewy', cursive; font-size: 2.8rem;
-            text-shadow: 2px 2px 0 #d60000, 0 5px 10px rgba(0,0,0,0.8); margin-bottom: 20px;
-            text-align: center; line-height: 1.1;
-        }
-
-        .video-link-card {
-            display: block; text-decoration: none;
-            background: linear-gradient(135deg, #ff3333, #990000);
-            padding: 20px; border-radius: 20px;
-            border: 4px solid white;
-            box-shadow: 0 10px 30px rgba(255,51,51,0.4);
-            transition: transform 0.2s;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .video-link-card:active {
-            transform: scale(0.95);
-        }
-
-        .video-thumbnail {
-            background: #000;
-            width: 250px; height: 140px;
-            border-radius: 12px;
-            display: flex; justify-content: center; align-items: center;
-            margin-bottom: 15px;
-            position: relative;
-            overflow: hidden;
-            border: 2px solid var(--yellow);
-        }
-
-        /* Fondo musical para la miniatura */
-        .video-thumbnail::before {
-             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-             background-image: url('https://images.unsplash.com/photo-1470229722913-7c090be5c520?q=80&w=400&auto=format&fit=crop');
-             background-size: cover; opacity: 0.5;
-        }
-
-        .play-icon {
-            font-size: 4rem; z-index: 2;
-            animation: pulsePlay 1.5s infinite;
-            filter: drop-shadow(0 4px 5px rgba(0,0,0,0.8));
-        }
-
-        @keyframes pulsePlay {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-        }
-
-        .video-link-card p {
-            color: white; font-family: 'Fredoka', sans-serif; font-size: 1.3rem; font-weight: bold;
-            margin: 0; text-shadow: 1px 1px 2px #000;
-        }
-
-        /* --- PANTALLA FINAL: INFO FIESTA --- */
-        #card-wrapper {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; align-items: flex-start; justify-content: center;
-            padding-top: 6vh; z-index: 150; transform-style: preserve-3d;
-        }
-
-        .card {
-            background: transparent; width: 95%; max-width: 400px; padding: 10px;
-            text-align: center; animation: popIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
-        }
-
-        @keyframes popIn { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-        @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
-
-        .title {
-            font-family: 'Chewy', cursive; font-size: 3.5rem; color: var(--yellow); 
-            text-shadow: 3px 3px 0px #d60000, -1px -1px 0 #d60000, 1px -1px 0 #d60000, -1px 1px 0 #d60000, 1px 1px 0 #d60000, 5px 5px 15px rgba(0,0,0,0.8);
-            line-height: 0.9; margin-bottom: 10px; transform: rotate(-3deg);
-        }
-
-        .subtitle { 
-            font-size: 1.4rem; color: white; margin-bottom: 15px; font-weight: 700; 
-            text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 4px 10px rgba(0,0,0,0.8);
-        }
-
-        .countdown { display: flex; justify-content: center; gap: 8px; margin-bottom: 15px; }
-        .time-box {
-            background: var(--red); color: white; border-radius: 12px; padding: 8px;
-            min-width: 55px; box-shadow: 0 4px 0 #880000, 0 8px 15px rgba(0,0,0,0.5); border: 2px solid white;
-        }
-        .time-box span { display: block; font-size: 1.8rem; font-family: 'Chewy', cursive; line-height: 1; }
-        .time-box small { font-size: 0.8rem; font-weight: bold; }
-
-        .info-box p { 
-            font-size: 1.3rem; margin: 10px 0; color: white; font-family: 'Fredoka', sans-serif;
-            text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 5px 10px rgba(0,0,0,0.8);
-        }
-
-        .btn-next {
-            background: var(--blue); color: white; border: 3px solid white;
-            padding: 12px 30px; font-size: 1.4rem; font-family: 'Chewy', cursive;
-            border-radius: 30px; cursor: pointer; box-shadow: 0 5px 0 #0044cc, 0 10px 20px rgba(0,0,0,0.5); 
-            margin-top: 15px; text-transform: uppercase; transition: transform 0.1s;
-        }
-        .btn-next:active { transform: translateY(5px); box-shadow: 0 0 0 #0044cc; }
 
         /* --- GLOBOS --- */
         #balloons-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 60; pointer-events: none; }
         .balloon {
-            position: absolute; bottom: -100px; width: 70px; height: 90px; border-radius: 50%;
+            position: absolute; bottom: -120px; width: 75px; height: 95px; border-radius: 50%;
             cursor: pointer; pointer-events: auto; animation: floatUp linear forwards;
-            box-shadow: inset -10px -10px 15px rgba(0,0,0,0.15), inset 5px 5px 10px rgba(255,255,255,0.6);
+            box-shadow: inset -10px -10px 15px rgba(0,0,0,0.2), inset 5px 5px 10px rgba(255,255,255,0.7);
+            transition: transform 0.1s;
         }
+        .balloon:active { transform: scale(0.9); }
         .balloon::after {
             content: ''; position: absolute; bottom: -60px; left: 50%; transform: translateX(-50%); width: 16px; height: 60px;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 60'%3E%3Cpath d='M8,0 Q16,6 8,12 T8,24 T8,36 T8,48 T8,60' fill='none' stroke='rgba(255,255,255,0.8)' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 60'%3E%3Cpath d='M8,0 Q16,6 8,12 T8,24 T8,36 T8,48 T8,60' fill='none' stroke='rgba(255,255,255,0.6)' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
         }
-        .balloon.popped { transform: scale(1.5) !important; opacity: 0 !important; }
+        .balloon.popped { 
+            transform: scale(1.8) !important; 
+            opacity: 0 !important; 
+            transition: all 0.15s ease-out;
+        }
 
         @keyframes floatUp {
             0% { transform: translateY(0) rotate(-5deg); }
@@ -283,22 +180,175 @@
             100% { transform: translateY(-120vh) rotate(-5deg); }
         }
 
+        /* --- PANTALLAS COMUNES --- */
+        .step-screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 120; text-align: center;
+        }
+
+        /* --- PREGUNTA CANTAR JUNTOS --- */
+        #step-sing-together { background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); }
+        #step-sing-together h1 {
+            color: white; font-family: 'Chewy', cursive; font-size: 3.8rem;
+            text-shadow: 4px 4px 0 var(--red), 0 5px 15px rgba(0,0,0,0.9); margin-bottom: 15px; line-height: 1;
+            transform: rotate(-2deg);
+        }
+        #step-sing-together h2 {
+            color: var(--yellow); font-family: 'Chewy', cursive; font-size: 2.5rem;
+            text-shadow: 2px 2px 0 #000, 0 5px 10px rgba(0,0,0,0.8); margin-bottom: 40px;
+        }
+
+        /* --- VIDEO --- */
+        #step-video { background: rgba(0,0,0,0.9); z-index: 130; }
+        .video-title {
+            color: var(--yellow); font-family: 'Chewy', cursive; font-size: 3rem;
+            text-shadow: 3px 3px 0 var(--dark-red), 0 5px 15px rgba(0,0,0,0.8); margin-bottom: 30px;
+            line-height: 1.1;
+        }
+        .video-link-card {
+            display: block; text-decoration: none;
+            background: linear-gradient(135deg, var(--red), var(--dark-red));
+            padding: 15px; border-radius: 20px;
+            border: 4px solid var(--gold);
+            box-shadow: 0 15px 35px rgba(230, 36, 36, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-bottom: 40px;
+        }
+        .video-link-card:active { transform: scale(0.95); box-shadow: 0 5px 15px rgba(230, 36, 36, 0.4); }
+        
+        .video-thumbnail {
+            background: #000;
+            width: 280px; height: 160px;
+            border-radius: 12px;
+            display: flex; justify-content: center; align-items: center;
+            margin-bottom: 15px; position: relative; overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+        .video-thumbnail::before {
+             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+             background-image: url('https://images.unsplash.com/photo-1470229722913-7c090be5c520?q=80&w=400&auto=format&fit=crop');
+             background-size: cover; opacity: 0.6; transition: opacity 0.3s;
+        }
+        .video-link-card:hover .video-thumbnail::before { opacity: 0.8; }
+        
+        .play-icon {
+            font-size: 4.5rem; z-index: 2;
+            animation: pulsePlay 1.5s infinite;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.9));
+        }
+
+        @keyframes pulsePlay {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        .video-link-card p {
+            color: white; font-size: 1.4rem; font-weight: bold; margin: 0; 
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8); letter-spacing: 0.5px;
+        }
+
+        /* --- TARJETA FINAL (Efecto Cristal) --- */
+        #card-wrapper {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 150; perspective: 1000px;
+        }
+
+        .glass-card {
+            background: rgba(20, 20, 20, 0.65);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-top: 2px solid rgba(255, 255, 255, 0.3);
+            border-left: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            width: 90%; max-width: 420px; 
+            padding: 30px 20px;
+            text-align: center; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            animation: popInCard 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popInCard { 
+            0% { transform: scale(0.8) translateY(50px); opacity: 0; } 
+            100% { transform: scale(1) translateY(0); opacity: 1; } 
+        }
+
+        .title {
+            font-family: 'Chewy', cursive; font-size: 4rem; color: var(--yellow); 
+            text-shadow: 3px 3px 0px var(--dark-red), -1px -1px 0 var(--dark-red), 1px -1px 0 var(--dark-red), -1px 1px 0 var(--dark-red), 1px 1px 0 var(--dark-red), 0 8px 15px rgba(0,0,0,0.6);
+            line-height: 0.95; margin-bottom: 5px; transform: rotate(-3deg);
+        }
+
+        .subtitle { 
+            font-size: 1.5rem; color: #fff; margin-bottom: 25px; font-weight: 700; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            letter-spacing: 1px;
+        }
+
+        .countdown { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; }
+        .time-box {
+            background: linear-gradient(135deg, var(--red), var(--dark-red)); 
+            color: white; border-radius: 15px; padding: 10px 5px;
+            min-width: 65px; 
+            box-shadow: 0 6px 0 #660000, 0 10px 20px rgba(0,0,0,0.5); 
+            border: 2px solid var(--gold);
+        }
+        .time-box span { display: block; font-size: 2rem; font-family: 'Chewy', cursive; line-height: 1; text-shadow: 2px 2px 0 rgba(0,0,0,0.3); }
+        .time-box small { font-size: 0.85rem; font-weight: bold; text-transform: uppercase; opacity: 0.9;}
+
+        .info-box {
+            background: rgba(0,0,0,0.4);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .info-box p { 
+            font-size: 1.25rem; margin: 8px 0; color: white; 
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+        }
+        .info-box p strong { color: var(--yellow); }
+
+        /* Botones Generales */
+        .btn-action {
+            background: linear-gradient(to bottom, #4da6ff, #0066cc);
+            color: white; border: 3px solid white;
+            padding: 15px 35px; font-size: 1.6rem; font-family: 'Chewy', cursive;
+            border-radius: 40px; cursor: pointer; 
+            box-shadow: 0 6px 0 #004080, 0 10px 20px rgba(0,0,0,0.5); 
+            text-transform: uppercase; transition: all 0.1s;
+            letter-spacing: 1px;
+            display: inline-block; text-decoration: none;
+        }
+        .btn-action:active { transform: translateY(6px); box-shadow: 0 0 0 #004080; }
+        
+        .btn-whatsapp {
+            background: linear-gradient(to bottom, #25D366, #128C7E);
+            box-shadow: 0 6px 0 #075E54, 0 10px 20px rgba(0,0,0,0.5); 
+            width: 100%;
+        }
+        .btn-whatsapp:active { box-shadow: 0 0 0 #075E54; }
+
         /* --- CONFETI --- */
         .mini-confetti {
             position: fixed; width: 10px; height: 10px; border-radius: 50%;
             pointer-events: none; z-index: 9999; animation: popExplode 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
         @keyframes popExplode { 0% { transform: translate(0, 0) scale(1); opacity: 1; } 100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; } }
-        .confetti { position: absolute; width: 12px; height: 12px; border-radius: 3px; z-index: 200; animation: fall 4s linear forwards; }
-        @keyframes fall { to { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+        
+        .confetti { position: absolute; width: 14px; height: 14px; border-radius: 3px; z-index: 200; animation: fall linear forwards; }
+        @keyframes fall { to { transform: translateY(105vh) rotate(720deg); opacity: 0; } }
 
-        @media (max-aspect-ratio: 1/1) { body { background-position: center top; } }
     </style>
 </head>
 <body>
 
-    <!-- MÚSICA DE FONDO DEL JUEGO (Libre de derechos) -->
-    <audio id="game-audio" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3" loop></audio>
+    <!-- MÚSICA DE FONDO Y EFECTOS DE SONIDO -->
+    <audio id="game-audio" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3" loop preload="auto"></audio>
+    <audio id="pop-audio" src="https://assets.mixkit.co/active_storage/sfx/3005/3005-preview.mp3" preload="auto"></audio>
+    <audio id="cheer-audio" src="https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3" preload="auto"></audio>
 
     <div class="stage-overlay"></div>
     <div id="curtain-left"></div>
@@ -307,184 +357,200 @@
     <!-- ETAPA 0: BOTÓN DE INICIO -->
     <div id="start-btn-container">
         <button id="play-btn" class="vip-button">¡Abrir Telón! 🎟️</button>
-        <p class="instruction">¡Sube el volumen!</p>
+        <p class="instruction">¡Enciende el sonido! 🔊</p>
     </div>
 
     <!-- ETAPA 1: EL JUEGO -->
     <div id="game-ui" style="display: none;">
-        <h2>¡Ayuda a preparar la fiesta!</h2>
+        <h2>¡Ayuda a preparar la fiesta de Emma!</h2>
         <p>Revienta 10 globos para ver la sorpresa</p>
         <div id="score-board">0 / 10</div>
     </div>
     <div id="balloons-container"></div>
 
     <!-- ETAPA 2: LA PREGUNTA -->
-    <div id="step-sing-together" style="display:none;">
-        <h1>¿Y si cantamos juntos?</h1>
-        <h2>¿Me acompañas?</h2>
-        <button class="btn-next" id="btn-go-video">¡Claro que sí! 🎤</button>
+    <div id="step-sing-together" class="step-screen" style="display:none;">
+        <h2>Hola Joaqui y Valen..</h2>
+        <h1>¿Sabias que una de las cosas que más me gusta hacer es cantar?</h1>         
+        <h2>¿Me acompañan?</h2>
+        <button class="btn-action" id="btn-go-video">¡Claro que sí! 🎤</button>
     </div>
 
-    <!-- ETAPA 3: EL VIDEO (Botón visual hacia YouTube) -->
-    <div id="step-video" style="display:none;">
+    <!-- ETAPA 3: EL VIDEO -->
+    <div id="step-video" class="step-screen" style="display:none;">
         <h2 class="video-title">¡Mira este video<br>sorpresa!</h2>
         
-        <a href="https://www.youtube.com/shorts/oR2ZU-hvJ28" target="_blank" class="video-link-card">
+        <a href="https://www.youtube.com/watch?v=KL6lOCopilw" target="_blank" class="video-link-card">
             <div class="video-thumbnail">
                 <div class="play-icon">▶️</div>
             </div>
             <p>Toca para ver en YouTube 🎬</p>
         </a>
 
-        <button class="btn-next" id="btn-show-info">Ver Información de la Fiesta ✨</button>
+        <button class="btn-action" id="btn-show-info">Ver mi Invitación ✨</button>
     </div>
 
-    <!-- ETAPA 4: LA GRAN REVELACIÓN (Info) -->
+    <!-- ETAPA 4: LA GRAN REVELACIÓN (Info de la Fiesta) -->
     <div id="card-wrapper" style="display:none;">
-        <div class="card" id="invitation-card">
+        <div class="glass-card">
             
-            <!-- ETAPA 4: INFORMACIÓN Y CONTADOR -->
-            <div id="step-info">
-                <h1 class="title">¡Emma<br>cumple 2!</h1>
-                
-                <div class="countdown">
-                    <div class="time-box"><span id="days">00</span><small>Días</small></div>
-                    <div class="time-box"><span id="hours">00</span><small>Hrs</small></div>
-                    <div class="time-box"><span id="minutes">00</span><small>Min</small></div>
-                    <div class="time-box"><span id="seconds">00</span><small>Seg</small></div>
-                </div>
-
-                <p class="subtitle">¡El gran show te espera!</p>
-                
-                <div class="info-box">
-                    <p>📅 <strong>11 de Abril de 2026</strong></p>
-                    <p>⏰ <strong>15:30 hrs</strong></p>
-                    <p>📍 <strong>Lugar:</strong> Cerro Lila 6200. Peñalolén. Casa 13.</p>
-                </div>
-                
-                <button class="btn-next" id="btn-go-confirm" style="margin-top: 15px;">Siguiente ➡️</button>
+            <h1 class="title">¡Emma<br>cumple 2!</h1>
+            <p class="subtitle">¡El gran show te espera!</p>
+            
+            <div class="countdown">
+                <div class="time-box"><span id="days">00</span><small>Días</small></div>
+                <div class="time-box"><span id="hours">00</span><small>Hrs</small></div>
+                <div class="time-box"><span id="minutes">00</span><small>Min</small></div>
+                <div class="time-box"><span id="seconds">00</span><small>Seg</small></div>
             </div>
-
-            <!-- ETAPA 5: CONFIRMACIÓN DE ASISTENCIA -->
-            <div id="step-confirm" style="display:none;">
-                <h1 class="title">¡Te esperamos!</h1>
-                <p class="subtitle" style="font-size: 1.6rem; margin-top: 20px; line-height: 1.4;">Por favor confirma<br>tu asistencia<br>con mis papis.</p>
+            
+            <div class="info-box">
+                <p>📅 <strong>Sábado, 11 de Abril 2026</strong></p>
+                <p>⏰ <strong>15:30 hrs</strong></p>
+                <p>📍 <strong>Lugar:</strong> Cerro Lila 6200.<br>Peñalolén. Casa 13.</p>
             </div>
+            
+            <h2 style="font-family: 'Chewy', cursive; font-size: 2.5rem; color: #fff; text-shadow: 2px 2px 0 var(--dark-red), 0 5px 10px rgba(0,0,0,0.6); margin-bottom: 20px; transform: rotate(-2deg);">¡Te esperamos!</h2>
+
+            <!-- Botón directo de WhatsApp -->
+            <a href="https://wa.me/56931242041?text=¡Hola!%20Confirmo%20mi%20asistencia%20al%20cumpleaños%20de%20Emma.%20¡No%20nos%20perderemos%20el%20show!%20🎟️🎤" 
+               target="_blank" 
+               class="btn-action btn-whatsapp">
+               Confirmar Asistencia 📲
+            </a>
 
         </div>
     </div>
 
     <script>
+        // --- Referencias DOM ---
         const playBtn = document.getElementById('play-btn');
         const btnGoVideo = document.getElementById('btn-go-video');
         const btnShowInfo = document.getElementById('btn-show-info');
-        const btnGoConfirm = document.getElementById('btn-go-confirm');
-        const gameAudio = document.getElementById('game-audio');
         
+        const gameAudio = document.getElementById('game-audio');
+        const popAudio = document.getElementById('pop-audio');
+        const cheerAudio = document.getElementById('cheer-audio');
+        
+        // --- Variables del Juego ---
         let globosReventados = 0;
         const metaGlobos = 10;
         let juegoTerminado = false;
+        let intervaloGlobos;
+
+        // Función auxiliar para transiciones suaves
+        function fadeElement(elementId, action, displayType = 'flex') {
+            const el = document.getElementById(elementId);
+            if(action === 'in') {
+                el.style.display = displayType;
+                el.classList.remove('fade-out');
+                el.classList.add('fade-in');
+            } else {
+                el.classList.remove('fade-in');
+                el.classList.add('fade-out');
+                setTimeout(() => el.style.display = 'none', 500);
+            }
+        }
 
         // --- ETAPA 1: ABRIR TELÓN Y JUEGO ---
         if(playBtn) {
             playBtn.addEventListener('click', () => {
-                document.getElementById('start-btn-container').style.display = 'none';
+                fadeElement('start-btn-container', 'out');
+                
                 document.getElementById('curtain-left').classList.add('curtain-open-left');
                 document.getElementById('curtain-right').classList.add('curtain-open-right');
 
-                // Iniciar música del juego
-                gameAudio.volume = 0.6; // Volumen moderado
+                // Iniciar música
+                gameAudio.volume = 0.5;
                 gameAudio.play().catch(e => console.log("Navegador bloqueó el audio automático"));
 
                 setTimeout(() => {
-                    document.getElementById('game-ui').style.display = 'block';
+                    fadeElement('game-ui', 'in', 'block');
                     iniciarGlobos();
-                }, 500);
+                }, 800);
             });
         }
 
         // --- ETAPA 3: ACEPTAR CANTAR E IR AL VIDEO ---
         if(btnGoVideo) {
             btnGoVideo.addEventListener('click', () => {
-                document.getElementById('step-sing-together').style.display = 'none';
-                document.getElementById('step-video').style.display = 'flex';
-                // Ya no inyectamos iframe, el enlace HTML se encarga de abrir YouTube
+                fadeElement('step-sing-together', 'out');
+                setTimeout(() => fadeElement('step-video', 'in', 'flex'), 300);
             });
         }
 
         // --- ETAPA 4: MOSTRAR INFORMACIÓN FINAL ---
         if(btnShowInfo) {
             btnShowInfo.addEventListener('click', () => {
-                document.getElementById('step-video').style.display = 'none';
+                fadeElement('step-video', 'out');
 
-                // Aquí es donde cambia al fondo de SING que me enviaste
+                // Cambio de fondo con transición
                 document.body.style.backgroundImage = "url('https://i.ibb.co/CKxZkHd0/fondo-sing.png')";
                 
                 const overlay = document.querySelector('.stage-overlay');
-                if(overlay) overlay.style.opacity = '0'; // Quita la sombra para que el fondo brille
+                if(overlay) overlay.style.opacity = '0.3'; // Mantiene un ligero oscurecimiento para lectura
 
-                // Muestra la tarjeta con la información en la parte superior
-                document.getElementById('card-wrapper').style.display = 'flex';
-                
-                iniciarContador();
-            });
-        }
-
-        // --- ETAPA 5: MOSTRAR CONFIRMACIÓN ---
-        if(btnGoConfirm) {
-            btnGoConfirm.addEventListener('click', () => {
-                document.getElementById('step-info').style.display = 'none';
-                document.getElementById('step-confirm').style.display = 'block';
+                setTimeout(() => {
+                    fadeElement('card-wrapper', 'in', 'flex');
+                    iniciarContador();
+                }, 500);
             });
         }
 
         // --- LÓGICA DE GLOBOS ---
         function iniciarGlobos() {
-            const colores = ['#ff3333', '#ffcc00', '#3399ff'];
+            const colores = ['#e62424', '#ffcc00', '#3399ff', '#d4af37', '#ff66b2'];
             const container = document.getElementById('balloons-container');
 
             function crearGlobo() {
                 if(juegoTerminado) return;
+                
                 const globo = document.createElement('div');
                 globo.classList.add('balloon');
                 globo.style.backgroundColor = colores[Math.floor(Math.random() * colores.length)];
                 globo.style.left = Math.random() * 80 + 'vw';
                 
-                const duracion = Math.random() * 3 + 4; 
+                const duracion = Math.random() * 3 + 3.5; // Entre 3.5 y 6.5s 
                 globo.style.animationDuration = duracion + 's';
                 
-                globo.onclick = function() {
+                globo.ontouchstart = globo.onclick = function(e) {
+                    e.preventDefault(); // Evita doble click en móviles
                     if(this.classList.contains('popped')) return; 
                     this.classList.add('popped');
                     
-                    if (navigator.vibrate) navigator.vibrate(30);
+                    // Efectos de sonido y vibración
+                    popAudio.currentTime = 0;
+                    popAudio.volume = 0.8;
+                    popAudio.play().catch(()=>{});
+                    if (navigator.vibrate) navigator.vibrate(40);
 
+                    // Partículas
                     const rect = this.getBoundingClientRect();
                     const x = rect.left + rect.width / 2;
                     const y = rect.top + rect.height / 2;
-
                     crearPapelillos(x, y, this.style.backgroundColor);
 
+                    // Puntaje
                     globosReventados++;
-                    const score = document.getElementById('score-board');
-                    if(score) score.innerText = `${globosReventados} / ${metaGlobos}`;
+                    document.getElementById('score-board').innerText = `${globosReventados} / ${metaGlobos}`;
                     
-                    if (globosReventados >= metaGlobos) {
-                        ganarJuego();
-                    }
+                    if (globosReventados >= metaGlobos) ganarJuego();
                     
                     setTimeout(() => { this.remove(); }, 200);
                 };
 
                 if(container) container.appendChild(globo);
+                
+                // Limpiar del DOM si no se revienta
                 setTimeout(() => { if (globo.parentNode) globo.remove(); }, duracion * 1000);
             }
-            setInterval(crearGlobo, 450);
+            
+            intervaloGlobos = setInterval(crearGlobo, 500);
         }
 
         // --- CONFETI MINI ---
         function crearPapelillos(x, y, bgColor) {
-            for(let i = 0; i < 15; i++) {
+            for(let i = 0; i < 12; i++) {
                 let conf = document.createElement('div');
                 conf.classList.add('mini-confetti');
                 conf.style.backgroundColor = bgColor;
@@ -492,69 +558,74 @@
                 conf.style.top = y + 'px';
                 
                 const angle = Math.random() * Math.PI * 2;
-                const distance = Math.random() * 80 + 20; 
-                const tx = Math.cos(angle) * distance;
-                const ty = Math.sin(angle) * distance;
-                
-                conf.style.setProperty('--tx', `${tx}px`);
-                conf.style.setProperty('--ty', `${ty}px`);
+                const distance = Math.random() * 60 + 30; 
+                conf.style.setProperty('--tx', `${Math.cos(angle) * distance}px`);
+                conf.style.setProperty('--ty', `${Math.sin(angle) * distance}px`);
                 
                 document.body.appendChild(conf);
                 setTimeout(() => conf.remove(), 600);
             }
         }
 
-        // --- ETAPA 2: GANAR JUEGO ---
+        // --- GANAR JUEGO ---
         function ganarJuego() {
             juegoTerminado = true;
+            clearInterval(intervaloGlobos);
             
-            // Ocultar juego y detener música
-            document.getElementById('game-ui').style.display = 'none';
+            // Sonido de victoria
+            cheerAudio.volume = 0.6;
+            cheerAudio.play().catch(()=>{});
             gameAudio.pause();
 
-            // Mostrar la pregunta
-            document.getElementById('step-sing-together').style.display = 'flex';
+            fadeElement('game-ui', 'out');
             
-            dispararGranConfeti();
+            setTimeout(() => {
+                fadeElement('step-sing-together', 'in', 'flex');
+                dispararGranConfeti();
+            }, 600);
         }
 
         // --- GRAN CONFETI ---
         function dispararGranConfeti() {
-            const colors = ['#ff3333', '#ffcc00', '#3399ff', '#ffffff'];
-            for(let i=0; i<80; i++) {
+            const colors = ['#e62424', '#ffcc00', '#3399ff', '#ffffff', '#d4af37'];
+            for(let i=0; i<100; i++) {
                 let conf = document.createElement('div');
                 conf.classList.add('confetti');
                 conf.style.left = Math.random() * 100 + 'vw';
                 conf.style.top = '-20px';
                 conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                conf.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                conf.style.animationDelay = (Math.random() * 1) + 's';
+                
+                const duracion = Math.random() * 3 + 2;
+                conf.style.animationDuration = duracion + 's';
+                conf.style.animationDelay = (Math.random() * 0.5) + 's';
+                
                 document.body.appendChild(conf);
-                setTimeout(() => conf.remove(), 5000);
+                setTimeout(() => conf.remove(), (duracion + 1) * 1000);
             }
         }
 
         // --- CONTADOR ---
         function iniciarContador() {
+            // Fecha del evento: 11 de Abril de 2026, 15:30:00
             const eventDate = new Date("April 11, 2026 15:30:00").getTime();
-            setInterval(function() {
+            
+            const intervalo = setInterval(function() {
                 const now = new Date().getTime();
                 const distance = eventDate - now;
+                
                 if (distance > 0) {
                     const days = Math.floor(distance / (1000 * 60 * 60 * 24));
                     const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                    const dEl = document.getElementById("days");
-                    const hEl = document.getElementById("hours");
-                    const mEl = document.getElementById("minutes");
-                    const sEl = document.getElementById("seconds");
-
-                    if(dEl) dEl.innerText = days.toString().padStart(2, '0');
-                    if(hEl) hEl.innerText = hours.toString().padStart(2, '0');
-                    if(mEl) mEl.innerText = minutes.toString().padStart(2, '0');
-                    if(sEl) sEl.innerText = seconds.toString().padStart(2, '0');
+                    document.getElementById("days").innerText = days.toString().padStart(2, '0');
+                    document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
+                    document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
+                    document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
+                } else {
+                    clearInterval(intervalo);
+                    document.querySelector('.countdown').innerHTML = "<h2 style='color:var(--yellow); font-family:Chewy; font-size: 2.5rem; text-shadow: 2px 2px #000;'>¡Llegó el gran día!</h2>";
                 }
             }, 1000);
         }
